@@ -15,6 +15,7 @@ Dir.glob("ext/#{NAME}/*{.rb,.c}") do
     ruby "extconf.rb"
     sh "make"
   end
+  mkdir_p "lib/#{NAME}"
   cp "ext/#{NAME}/#{NAME}.#{EXT}", "lib/#{NAME}"
 end
 
