@@ -1,7 +1,14 @@
 # procinfo
 
 A Ruby/C extension packaged as a gem that provides a more uniform interface
-to \*NIX process information.
+to \*NIX process, system, and socket information.
+
+
+At the moment it only implements process information retrieved from the
+`getrusage` POSIX system call for the current process (`SELF`). Therefore,
+this is compatible with POSIX-compatible OSes.
+
+More is coming.
 
 ## Motivation
 
@@ -25,7 +32,7 @@ more information.
 
 ## Author(s)
 
-* Susan Potter <me at susanpotter do net> (mbbx6spp on GitHub)
+* [Susan Potter](http://susanpotter.net) <me at susanpotter do net> (mbbx6spp on GitHub)
 
 ## Contributor(s)
 
