@@ -16,8 +16,12 @@ More is coming.
 
 I really needed to be able to get current RSS and max RSS information (and
 related process information) for a given process (which may or may not be
-the current running process). No Ruby library (as far as I found offered a
-consistent view of this information across the most \*NIX OSes).
+the current running process). No Ruby library (as far as I found) offered a
+consistent view of this information across the most \*NIX OSes and were
+currently maintained with tests.
+
+Plus this is a great exercise for me after forgetting C after 11 years of
+not developing with it. It's a breath of fresh air.
 
 ## Related Works
 
@@ -26,6 +30,20 @@ degree. I wanted to use a different approach to this library and lower
 overhead, and compatibility of APIs exposed for all the supporting OSes.
 
 However, the above mentioned library may offer what you need.
+
+## TODO
+
+Lots to do still.
+
+Before I cut v0.1.0 I plan on doing:
+
+* Adding ability to get all `CHILDREN` process information, not just SELF
+* Add samples
+* Add documentation
+
+Longer-term I would like to do the following:
+
+* Add socket/connection retrieval from the system based on state (e.g. `CLOSE_WAIT`)
 
 ## License
 
