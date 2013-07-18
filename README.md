@@ -1,5 +1,7 @@
 # procinfo
 
+![Travis CI build status](https://api.travis-ci.org/mbbx6spp/ruby-procinfo.png)
+
 A Ruby/C extension packaged as a gem that provides a more uniform interface
 to \*NIX process, system, and socket information.
 
