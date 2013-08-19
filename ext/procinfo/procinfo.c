@@ -3,7 +3,7 @@
 #include <sys/resource.h>
 #include <sys/wait.h>
 
-static VALUE S_PROC_INFO = Qnil;
+static VALUE S_PROC_STATS = Qnil;
 
 // signatures
 void Init_procinfo(void);
@@ -11,9 +11,18 @@ static VALUE procinfo_stats(VALUE);
 static VALUE _to_proc_stats_struct(const struct rusage *);
 static VALUE _to_time_value(struct timeval);
 
-static VALUE procinfo_stats(VALUE self) {
+static VALUE procinfo_self_stats() {
   struct rusage usage;
   if (getrusage(RUSAGE_SELF, &usage) == -1) {
+    rb_raise(rb_eRuntimeError, "getrusage call returned -1");
+  }
+
+  return _to_proc_stats_struct(&usage);
+}
+
+static VALUE procinfo_children_stats() {
+  struct rusage usage;
+  if (getrusage(RUSAGE_CHILDREN, &usage) == -1) {
     rb_raise(rb_eRuntimeError, "getrusage call returned -1");
   }
 
@@ -37,7 +46,7 @@ static VALUE _to_proc_stats_struct(const struct rusage *usage) {
   VALUE signals_recvd = rb_int_new(usage->ru_nsignals);
   VALUE voluntary_switches = rb_int_new(usage->ru_nvcsw);
   VALUE involuntary_switches = rb_int_new(usage->ru_nivcsw);
-  return rb_struct_new(S_PROC_INFO,
+  return rb_struct_new(S_PROC_STATS,
     user_time,              // usage->ru_utime
     system_time,            // usage->ru_stime
     max_rss,                // usage->ru_maxrss
@@ -65,7 +74,7 @@ static VALUE _to_time_value(struct timeval t) {
 // Initialization function to setup struct and module method
 void Init_procinfo(void) {
   VALUE M_PROCESS = rb_define_module("Process");
-  S_PROC_INFO = rb_struct_define("ProcStats",
+  S_PROC_STATS = rb_struct_define("ProcStats",
                   "user_time", "system_time", "max_rss",
                   "shared_text_size", "unshared_data_size",
                   "unshared_stack_size", "page_reclaims", "page_faults",
@@ -73,6 +82,7 @@ void Init_procinfo(void) {
                   "msgs_sent", "msgs_recvd", "signals_recvd",
                   "voluntary_switches", "involuntary_switches", NULL);
 
-  rb_const_set(M_PROCESS, rb_intern("ProcStats"), S_PROC_INFO);
-  rb_define_singleton_method(M_PROCESS, "stats", procinfo_stats, 0);
+  rb_const_set(M_PROCESS, rb_intern("ProcStats"), S_PROC_STATS);
+  rb_define_singleton_method(M_PROCESS, "stats_for_self", procinfo_self_stats, -1);
+  rb_define_singleton_method(M_PROCESS, "stats_for_children", procinfo_children_stats, -1);
 }
