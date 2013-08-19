@@ -7,8 +7,9 @@ to \*NIX process, system, and socket information.
 
 
 At the moment it only implements process information retrieved from the
-`getrusage` POSIX system call for the current process (`SELF`). Therefore,
-this is compatible with POSIX-compatible OSes.
+`getrusage` POSIX system call for the current process (`SELF`) and children
+processes (`CHILDREN`). Therefore, this is compatible with POSIX-compatible
+OSes.
 
 More is coming.
 
