@@ -8,10 +8,9 @@ to \*NIX process, system, and socket information.
 
 At the moment it only implements process information retrieved from the
 `getrusage` POSIX system call for the current process (`SELF`) and children
-processes (`CHILDREN`). Therefore, this is compatible with POSIX-compatible
-OSes.
+processes (`CHILDREN`) plus uname system information.
 
-More is coming.
+This is compatible with POSIX-compatible OSes.
 
 ## Example Usage
 
@@ -66,12 +65,6 @@ However, the above mentioned library may offer what you need.
 ## TODO
 
 Lots to do still.
-
-Before I cut v0.1.0 I plan on doing:
-
-* Adding ability to get all `CHILDREN` process information, not just SELF
-* Add samples
-* Add documentation
 
 Longer-term I would like to do the following:
 
