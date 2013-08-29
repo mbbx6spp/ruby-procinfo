@@ -2,12 +2,15 @@
 
 #include <sys/resource.h>
 #include <sys/wait.h>
+#include <sys/utsname.h>
 
 static VALUE S_PROC_STATS = Qnil;
+static VALUE S_SYS_INFO   = Qnil;
 
 // signatures
 void Init_procinfo(void);
-static VALUE procinfo_stats(VALUE);
+static VALUE sysinfo_uname(void);
+static VALUE _to_sysinfo_struct(const struct utsname *);
 static VALUE _to_proc_stats_struct(const struct rusage *);
 static VALUE _to_time_value(struct timeval);
 
@@ -23,10 +26,19 @@ static VALUE procinfo_self_stats() {
 static VALUE procinfo_children_stats() {
   struct rusage usage;
   if (getrusage(RUSAGE_CHILDREN, &usage) == -1) {
-    rb_raise(rb_eRuntimeError, "getrusage call returned -1");
+    rb_raise(rb_eRuntimeError, "getrusage system call returned -1");
   }
 
   return _to_proc_stats_struct(&usage);
+}
+
+static VALUE sysinfo_uname() {
+  struct utsname name;
+  if (uname(&name) == -1) {
+    rb_raise(rb_eRuntimeError, "uname system call returned -1");
+  }
+
+  return _to_sysinfo_struct(&name);
 }
 
 static VALUE _to_proc_stats_struct(const struct rusage *usage) {
@@ -63,12 +75,27 @@ static VALUE _to_proc_stats_struct(const struct rusage *usage) {
     signals_recvd,          // usage->ru_nsignals
     voluntary_switches,     // usage->ru_nvcsw
     involuntary_switches,   // usage->ru_nivcsw
-    NULL);
+    NULL) ;
 }
 
 static VALUE _to_time_value(struct timeval t) {
   double time = t.tv_sec + t.tv_usec / 1000000.0;
   return rb_float_new(time);
+}
+
+static VALUE _to_sysinfo_struct(const struct utsname *name) {
+  VALUE sysname = rb_str_new(name->sysname, strlen(name->sysname));
+  VALUE nodename = rb_str_new(name->nodename, strlen(name->nodename));
+  VALUE release = rb_str_new(name->release, strlen(name->release));
+  VALUE version = rb_str_new(name->version, strlen(name->version));
+  VALUE machine = rb_str_new(name->machine, strlen(name->machine));
+  return rb_struct_new(S_SYS_INFO,
+    sysname,            // name->sysname
+    nodename,           // name->nodename
+    release,            // name->release
+    version,            // name->version
+    machine,            // name->machine
+    NULL);
 }
 
 // Initialization function to setup struct and module method
@@ -81,8 +108,13 @@ void Init_procinfo(void) {
                   "swaps", "block_input_ops", "block_output_ops",
                   "msgs_sent", "msgs_recvd", "signals_recvd",
                   "voluntary_switches", "involuntary_switches", NULL);
-
   rb_const_set(M_PROCESS, rb_intern("ProcStats"), S_PROC_STATS);
   rb_define_singleton_method(M_PROCESS, "stats_for_self", procinfo_self_stats, -1);
   rb_define_singleton_method(M_PROCESS, "stats_for_children", procinfo_children_stats, -1);
+
+  VALUE M_SYSTEM = rb_define_module("System");
+  S_SYS_INFO = rb_struct_define("SystemInfo",
+    "sysname", "nodename", "release", "version", "machine", NULL);
+  rb_const_set(M_SYSTEM, rb_intern("SystemInfo"), S_SYS_INFO);
+  rb_define_singleton_method(M_SYSTEM, "uname", sysinfo_uname, -1);
 }
