@@ -32,6 +32,18 @@ puts stats.block_input_ops
 puts stats.block_output_ops
 ```
 
+You can also get uname information about the system your process is running
+on:
+
+```ruby
+sysinfo = System.uname
+puts sysinfo.sysname
+puts sysinfo.nodename
+puts sysinfo.release
+puts sysinfo.version
+puts sysinfo.machine
+```
+
 ## Motivation
 
 I really needed to be able to get current RSS and max RSS information (and
