@@ -13,6 +13,25 @@ OSes.
 
 More is coming.
 
+## Example Usage
+
+Retrieve rusage stats for all children processes:
+
+```ruby
+stats = Process.stats(:children)
+puts stats.user_time, stats.system_time
+# some useful fields, but few others supported
+puts stats.max_rss
+puts stats.page_faults
+puts stats.msgs_sent
+puts stats.msgs_recvd
+puts stats.signals_recvd
+puts stats.shared_text_size
+puts stats.swaps
+puts stats.block_input_ops
+puts stats.block_output_ops
+```
+
 ## Motivation
 
 I really needed to be able to get current RSS and max RSS information (and
