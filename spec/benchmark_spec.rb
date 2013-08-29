@@ -1,6 +1,10 @@
 require "minitest/benchmark"
 
 describe "Process information retrieval" do
+  bench_performance_constant "System.uname" do
+    System.uname
+  end
+
   bench_performance_constant "Process.stats" do
     Process.stats
   end
