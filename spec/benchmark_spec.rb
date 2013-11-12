@@ -1,4 +1,5 @@
 require "minitest/benchmark"
+require 'posix/spawn'
 
 describe "Process information retrieval" do
   bench_performance_constant "System.uname" do
@@ -23,7 +24,6 @@ describe "Process information retrieval" do
 
   bench_performance_constant "POSIX::Spawn.popen4" do
     begin
-      require 'posix/spawn'
       pid, stdin, stdout, stderr = POSIX::Spawn.popen4('ps', "-o rss= -p #{Process.pid}")
       stdin.close
       rss = stdout.read.to_i
