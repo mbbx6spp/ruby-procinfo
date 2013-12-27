@@ -3,3 +3,4 @@
 *.o
 ext/procinfo/Makefile
 *.gem
+.vagrant
