@@ -7,9 +7,7 @@
 
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="javascripts/scale.fix.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -19,7 +17,10 @@
       <header>
         <h1>Ruby-procinfo</h1>
         <p>A very simple Ruby/C extension to (at the moment) retrieve getrusage information about current process</p>
+
         <p class="view"><a href="https://github.com/mbbx6spp/ruby-procinfo">View the Project on GitHub <small>mbbx6spp/ruby-procinfo</small></a></p>
+
+
         <ul>
           <li><a href="https://github.com/mbbx6spp/ruby-procinfo/zipball/master">Download <strong>ZIP File</strong></a></li>
           <li><a href="https://github.com/mbbx6spp/ruby-procinfo/tarball/master">Download <strong>TAR Ball</strong></a></li>
@@ -32,97 +33,122 @@
 
 <p><img src="https://api.travis-ci.org/mbbx6spp/ruby-procinfo.png" alt="Travis CI build status"></p>
 
-<p>A Ruby/C extension packaged as a gem that provides a more uniform interface<br>
-to *NIX process, system, and socket information.                                          </p>
+<p>A Ruby/C extension packaged as a gem that provides a more uniform interface
+to *NIX process, system, and socket information.</p>
 
-<p>At the moment it only implements process information retrieved from the<br><code>getrusage</code> POSIX system call for the current process (<code>SELF</code>) and children<br>
-processes (<code>CHILDREN</code>). Therefore, this is compatible with POSIX-compatible<br>
-OSes.                                                                                      </p>
+<p>At the moment it only implements process information retrieved from the
+<code>getrusage</code> POSIX system call for the current process (<code>SELF</code>) and children
+processes (<code>CHILDREN</code>) plus uname system information.</p>
 
-<p>More is coming.                                                                            </p>
+<p>This is compatible with POSIX-compatible OSes.</p>
 
 <h2>
 <a name="example-usage" class="anchor" href="#example-usage"><span class="octicon octicon-link"></span></a>Example Usage</h2>
 
-<p>Retrieve rusage stats for all children processes:                                          </p>
+<p>Retrieve rusage stats for all children processes:</p>
 
-<div class="highlight"><pre><span class="n">stats</span> <span class="o">=</span> <span class="no">Process</span><span class="o">.</span><span class="n">stats</span><span class="p">(</span><span class="ss">:children</span><span class="p">)</span>                                                           
-<span class="nb">puts</span> <span class="n">stats</span><span class="o">.</span><span class="n">user_time</span><span class="p">,</span> <span class="n">stats</span><span class="o">.</span><span class="n">system_time</span>                                                    
-<span class="c1"># some useful fields, but few others supported                                             </span>
-<span class="nb">puts</span> <span class="n">stats</span><span class="o">.</span><span class="n">max_rss</span>                                                                         
-<span class="nb">puts</span> <span class="n">stats</span><span class="o">.</span><span class="n">page_faults</span>                                                                     
-<span class="nb">puts</span> <span class="n">stats</span><span class="o">.</span><span class="n">msgs_sent</span>                                                                       
-<span class="nb">puts</span> <span class="n">stats</span><span class="o">.</span><span class="n">msgs_recvd</span>                                                                      
-<span class="nb">puts</span> <span class="n">stats</span><span class="o">.</span><span class="n">signals_recvd</span>                                                                   
-<span class="nb">puts</span> <span class="n">stats</span><span class="o">.</span><span class="n">shared_text_size</span>                                                                
-<span class="nb">puts</span> <span class="n">stats</span><span class="o">.</span><span class="n">swaps</span>                                                                           
-<span class="nb">puts</span> <span class="n">stats</span><span class="o">.</span><span class="n">block_input_ops</span>                                                                 
-<span class="nb">puts</span> <span class="n">stats</span><span class="o">.</span><span class="n">block_output_ops</span>                                                                
+<div class="highlight highlight-ruby"><pre><span class="n">stats</span> <span class="o">=</span> <span class="no">Process</span><span class="o">.</span><span class="n">stats</span><span class="p">(</span><span class="ss">:children</span><span class="p">)</span>
+<span class="nb">puts</span> <span class="n">stats</span><span class="o">.</span><span class="n">user_time</span><span class="p">,</span> <span class="n">stats</span><span class="o">.</span><span class="n">system_time</span>
+<span class="c1"># some useful fields, but few others supported</span>
+<span class="nb">puts</span> <span class="n">stats</span><span class="o">.</span><span class="n">max_rss</span>
+<span class="nb">puts</span> <span class="n">stats</span><span class="o">.</span><span class="n">page_faults</span>
+<span class="nb">puts</span> <span class="n">stats</span><span class="o">.</span><span class="n">msgs_sent</span>
+<span class="nb">puts</span> <span class="n">stats</span><span class="o">.</span><span class="n">msgs_recvd</span>
+<span class="nb">puts</span> <span class="n">stats</span><span class="o">.</span><span class="n">signals_recvd</span>
+<span class="nb">puts</span> <span class="n">stats</span><span class="o">.</span><span class="n">shared_text_size</span>
+<span class="nb">puts</span> <span class="n">stats</span><span class="o">.</span><span class="n">swaps</span>
+<span class="nb">puts</span> <span class="n">stats</span><span class="o">.</span><span class="n">block_input_ops</span>
+<span class="nb">puts</span> <span class="n">stats</span><span class="o">.</span><span class="n">block_output_ops</span>
 </pre></div>
+
+<p>You can also get uname information about the system your process is running
+on:</p>
+
+<div class="highlight highlight-ruby"><pre><span class="n">sysinfo</span> <span class="o">=</span> <span class="no">System</span><span class="o">.</span><span class="n">uname</span>
+<span class="nb">puts</span> <span class="n">sysinfo</span><span class="o">.</span><span class="n">sysname</span>
+<span class="nb">puts</span> <span class="n">sysinfo</span><span class="o">.</span><span class="n">nodename</span>
+<span class="nb">puts</span> <span class="n">sysinfo</span><span class="o">.</span><span class="n">release</span>
+<span class="nb">puts</span> <span class="n">sysinfo</span><span class="o">.</span><span class="n">version</span>
+<span class="nb">puts</span> <span class="n">sysinfo</span><span class="o">.</span><span class="n">machine</span>
+</pre></div>
+
+<h2>
+<a name="micro-benchmarks" class="anchor" href="#micro-benchmarks"><span class="octicon octicon-link"></span></a>Micro Benchmarks</h2>
+
+<p>This is only useful if you need to poll this information often, so use judiciously:</p>
+
+<pre><code># Running benchmarks:
+
+
+Process information retrieval            1              10             100            1000           10000
+bench_POSIX_Spawn_popen4          0.005980        0.025996        0.004227        0.002901        0.002780
+bench_Process_stats               0.000048        0.000041        0.000034        0.000035        0.000036
+bench_Process_stats_children      0.000042        0.000038        0.000034        0.000031        0.000032
+bench_Process_stats_self          0.000048        0.000046        0.000032        0.000033        0.000035
+bench_Spawn_ps_rss                0.050123        0.020579        0.043924        0.058219        0.064938
+bench_System_uname                0.000042        0.000031        0.000027        0.000027        0.000026
+
+
+Finished benchmarks in 0.673457s, 8.9093 tests/s, 8.9093 assertions/s.
+
+6 tests, 6 assertions, 0 failures, 0 errors, 0 skips
+</code></pre>
+
+<p>The control micro benchmarks are <code>bench_POSIX_Spawn_popen4</code> and <code>bench_Spawn_ps_rss</code>. As you can see comparatively this gem (since it is a Ruby/C extension) is pretty efficient.</p>
 
 <h2>
 <a name="motivation" class="anchor" href="#motivation"><span class="octicon octicon-link"></span></a>Motivation</h2>
 
-<p>I really needed to be able to get current RSS and max RSS information (and<br>
-related process information) for a given process (which may or may not be<br>
-the current running process). No Ruby library (as far as I found) offered a<br>
-consistent view of this information across the most *NIX OSes and were<br>
-currently maintained with tests.                                                       </p>
+<p>I really needed to be able to get current RSS and max RSS information (and
+related process information) for a given process (which may or may not be
+the current running process). No Ruby library (as far as I found) offered a
+consistent view of this information across the most *NIX OSes and were
+currently maintained with tests.</p>
 
-<p>Plus this is a great exercise for me after forgetting C after 11 years of<br>
-not developing with it. It's a breath of fresh air.                                    </p>
+<p>Plus this is a great exercise for me after forgetting C after 11 years of
+not developing with it. It's a breath of fresh air.</p>
 
 <h2>
 <a name="related-works" class="anchor" href="#related-works"><span class="octicon octicon-link"></span></a>Related Works</h2>
 
-<p><code>sys-proctable</code> is Ruby/C extension library that provides this to some<br>
-degree. I wanted to use a different approach to this library and lower<br>
-overhead, and compatibility of APIs exposed for all the supporting OSes.               </p>
+<p><code>sys-proctable</code> is Ruby/C extension library that provides this to some
+degree. I wanted to use a different approach to this library and lower
+overhead, and compatibility of APIs exposed for all the supporting OSes.</p>
 
-<p>However, the above mentioned library may offer what you need.                          </p>
+<p>However, the above mentioned library may offer what you need.</p>
 
 <h2>
 <a name="todo" class="anchor" href="#todo"><span class="octicon octicon-link"></span></a>TODO</h2>
 
-<p>Lots to do still.                                                                      </p>
+<p>Lots to do still.</p>
 
-<p>Before I cut v0.1.0 I plan on doing:                                                   </p>
-
-<ul>
-<li>Adding ability to get all <code>CHILDREN</code> process information, not just SELF<br>
-</li>
-<li>Add samples<br>
-</li>
-<li>Add documentation<br>
-</li>
-</ul><p>Longer-term I would like to do the following:                                          </p>
+<p>Longer-term I would like to do the following:</p>
 
 <ul>
-<li>Add socket/connection retrieval from the system based on state (e.g. <code>CLOSE_WAIT</code>)<br>
-</li>
+<li>Add socket/connection retrieval from the system based on state (e.g. <code>CLOSE_WAIT</code>)</li>
 </ul><h2>
 <a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
 
-<p>This code is shared under the BSD 3-clause license. See LICENSE for<br>
-more information.                                                                      </p>
+<p>This code is shared under the BSD 3-clause license. See LICENSE for
+more information.</p>
 
 <h2>
 <a name="authors" class="anchor" href="#authors"><span class="octicon octicon-link"></span></a>Author(s)</h2>
 
 <ul>
 <li>
-<a href="http://susanpotter.net">Susan Potter</a>  (mbbx6spp on GitHub) </li>
+<a href="http://susanpotter.net">Susan Potter</a>  (mbbx6spp on GitHub)</li>
 </ul><h2>
 <a name="contributors" class="anchor" href="#contributors"><span class="octicon octicon-link"></span></a>Contributor(s)</h2>
 
-<p>N/A                                                                                                                                                               </p>
+<p>N/A</p>
       </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/mbbx6spp">mbbx6spp</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
     </div>
-    <footer>
-      <p>Project maintained by <a href="https://github.com/mbbx6spp">mbbx6spp</a></p>
-      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
-    </footer>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    <script src="javascripts/scale.fix.js"></script>
     
   </body>
 </html>
