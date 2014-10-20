@@ -43,6 +43,45 @@ puts sysinfo.version
 puts sysinfo.machine
 ```
 
+## Microbenchmarks
+
+The reason I even bothered writing this tiny, focused gem is because while on 
+vacation at a Rails shop I used to work at someone added a `ps ef | awk ...`
+shell from the Rails app ever 10th request to get the RSS and decide if we
+should kill the worker. Needless to say this was a crazy idea. As a consequence
+efficiency of this library was paramount so we could use it in the Rails app
+Unicorn worker hook as needed.
+
+So here are some microbenchmarks for this APIs usage:
+
+```
+# Running benchmarks:
+
+
+Process information retrieval            1              10             100            1000           10000
++bench_POSIX_Spawn_popen4         0.005980        0.025996        0.004227        0.002901        0.002780
+bench_Process_stats               0.000048        0.000041        0.000034        0.000035        0.000036
+bench_Process_stats_children      0.000042        0.000038        0.000034        0.000031        0.000032
+bench_Process_stats_self          0.000048        0.000046        0.000032        0.000033        0.000035
+bench_Spawn_ps_rss                0.050123        0.020579        0.043924        0.058219        0.064938
+bench_System_uname                0.000042        0.000031        0.000027        0.000027        0.000026
+
+
+Finished benchmarks in 0.673457s, 8.9093 tests/s, 8.9093 assertions/s.
+
+6 tests, 6 assertions, 0 failures, 0 errors, 0 skips
+```
+
+The above was running on my personal Macbook Pro development laptop instead of one of the 
+target Linux systems, but similar orders of magnitude differences were recorded for our 
+intended target too (I no longer work there so I can't run on that target host type now).
+
+The point of the above isn't to pat myself on the back rather just to ensure I'm not smoking
+crack when I introduce new APIs and/or fix any bugs.
+
+You should always sanity check your assumption. Some assumptions are completely flawed, but
+even ones that seem reasonable should be validated in some scope and form.
+
 ## Motivation
 
 I really needed to be able to get current RSS and max RSS information (and
