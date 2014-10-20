@@ -47,7 +47,7 @@ puts sysinfo.machine
 
 The reason I even bothered writing this tiny, focused gem is because while on 
 vacation at a Rails shop I used to work at someone added a `ps ef | awk ...`
-shell from the Rails app ever 10th request to get the RSS and decide if we
+shell from the Rails app every tenth request to get the RSS and decide if we
 should kill the worker. Needless to say this was a crazy idea. As a consequence
 efficiency of this library was paramount so we could use it in the Rails app
 Unicorn worker hook as needed.
@@ -72,15 +72,21 @@ Finished benchmarks in 0.673457s, 8.9093 tests/s, 8.9093 assertions/s.
 6 tests, 6 assertions, 0 failures, 0 errors, 0 skips
 ```
 
-The above was running on my personal Macbook Pro development laptop instead of one of the 
-target Linux systems, but similar orders of magnitude differences were recorded for our 
-intended target too (I no longer work there so I can't run on that target host type now).
+The above was running on my personal Macbook Pro development laptop 
+instead of one of the target Linux systems, but similar orders of magnitude 
+differences were recorded for our intended target too (I no longer work 
+there so I can't run on that target host type now).
 
-The point of the above isn't to pat myself on the back rather just to ensure I'm not smoking
-crack when I introduce new APIs and/or fix any bugs.
+The point of the above isn't to pat myself on the back rather just to ensure 
+I'm not smoking crack when I introduce new APIs and/or fix any bugs. It 
+should also warn you of not running the microbenchmark test suite on your 
+target systems. You can do this by running the following:
 
-You should always sanity check your assumption. Some assumptions are completely flawed, but
-even ones that seem reasonable should be validated in some scope and form.
+    bundle exec rake test
+
+You should always sanity check your assumptions. Some assumptions are completely 
+flawed, but even ones that seem reasonable should be validated in some scope and 
+form.
 
 ## Motivation
 
