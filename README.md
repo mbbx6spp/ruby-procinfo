@@ -1,16 +1,33 @@
 # procinfo
 
 ![Travis CI build status](https://api.travis-ci.org/mbbx6spp/ruby-procinfo.png)
+![Latest Github Tag](https://img.shields.io/github/tag/mbbx6spp/ruby-procinfo.svg)
+![Licensed under BSD-3-Clause](https://img.shields.io/github/license/mbbx6spp/ruby-procinfo.svg?maxAge=2592000?style=plastic)
 
 A Ruby/C extension packaged as a gem that provides a more uniform interface
 to \*NIX process, system, and socket information.
-
 
 At the moment it only implements process information retrieved from the
 `getrusage` POSIX system call for the current process (`SELF`) and children
 processes (`CHILDREN`) plus uname system information.
 
 This is compatible with POSIX-compatible OSes.
+
+## Getting Started
+
+Install it from the command-line via:
+
+```bash
+$ gem install ruby-procinfo
+Successfully installed ruby-procinfo-0.2.1-x86_64-linux
+1 gem installed
+```
+
+Or add it to your Ruby project at the end of your Gemfile like so:
+
+```ruby
+gem 'ruby-procinfo', '~>0.2.1'
+```
 
 ## Example Usage
 
@@ -45,7 +62,7 @@ puts sysinfo.machine
 
 ## Microbenchmarks
 
-The reason I even bothered writing this tiny, focused gem is because while on 
+The reason I even bothered writing this tiny, focused gem is because while on
 vacation at a Rails shop I used to work at someone added a `ps ef | awk ...`
 shell from the Rails app every tenth request to get the RSS and decide if we
 should kill the worker. Needless to say this was a crazy idea. As a consequence
@@ -72,20 +89,20 @@ Finished benchmarks in 0.673457s, 8.9093 tests/s, 8.9093 assertions/s.
 6 tests, 6 assertions, 0 failures, 0 errors, 0 skips
 ```
 
-The above was running on my personal Macbook Pro development laptop 
-instead of one of the target Linux systems, but similar orders of magnitude 
-differences were recorded for our intended target too (I no longer work 
+The above was running on my personal Macbook Pro development laptop
+instead of one of the target Linux systems, but similar orders of magnitude
+differences were recorded for our intended target too (I no longer work
 there so I can't run on that target host type now).
 
-The point of the above isn't to pat myself on the back rather just to ensure 
-I'm not smoking crack when I introduce new APIs and/or fix any bugs. It 
-should also warn you of not running the microbenchmark test suite on your 
+The point of the above isn't to pat myself on the back rather just to ensure
+I'm not smoking crack when I introduce new APIs and/or fix any bugs. It
+should also warn you of not running the microbenchmark test suite on your
 target systems. You can do this by running the following:
 
     bundle exec rake test
 
-You should always sanity check your assumptions. Some assumptions are completely 
-flawed, but even ones that seem reasonable should be validated in some scope and 
+You should always sanity check your assumptions. Some assumptions are completely
+flawed, but even ones that seem reasonable should be validated in some scope and
 form.
 
 ## Motivation
