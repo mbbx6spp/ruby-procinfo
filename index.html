@@ -1,37 +1,30 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en-us">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta charset="UTF-8">
     <title>Ruby-procinfo by mbbx6spp</title>
-
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
   <body>
-    <div class="wrapper">
-      <header>
-        <h1>Ruby-procinfo</h1>
-        <p>A very simple Ruby/C extension to (at the moment) retrieve getrusage information about current process</p>
+    <section class="page-header">
+      <h1 class="project-name">Ruby-procinfo</h1>
+      <h2 class="project-tagline">A very simple Ruby/C extension to (at the moment) retrieve getrusage information about current process</h2>
+      <a href="https://github.com/mbbx6spp/ruby-procinfo" class="btn">View on GitHub</a>
+      <a href="https://github.com/mbbx6spp/ruby-procinfo/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/mbbx6spp/ruby-procinfo/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
 
-        <p class="view"><a href="https://github.com/mbbx6spp/ruby-procinfo">View the Project on GitHub <small>mbbx6spp/ruby-procinfo</small></a></p>
+    <section class="main-content">
+      <h1>
+<a id="procinfo" class="anchor" href="#procinfo" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>procinfo</h1>
 
-
-        <ul>
-          <li><a href="https://github.com/mbbx6spp/ruby-procinfo/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/mbbx6spp/ruby-procinfo/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/mbbx6spp/ruby-procinfo">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
-        <h1>
-<a name="procinfo" class="anchor" href="#procinfo"><span class="octicon octicon-link"></span></a>procinfo</h1>
-
-<p><img src="https://api.travis-ci.org/mbbx6spp/ruby-procinfo.png" alt="Travis CI build status"></p>
+<p><img src="https://api.travis-ci.org/mbbx6spp/ruby-procinfo.png" alt="Travis CI build status">
+<img src="https://img.shields.io/github/tag/mbbx6spp/ruby-procinfo.svg" alt="Latest Github Tag">
+<img src="https://img.shields.io/github/license/mbbx6spp/ruby-procinfo.svg?maxAge=2592000?style=plastic" alt="Licensed under BSD-3-Clause"></p>
 
 <p>A Ruby/C extension packaged as a gem that provides a more uniform interface
 to *NIX process, system, and socket information.</p>
@@ -43,61 +36,188 @@ processes (<code>CHILDREN</code>) plus uname system information.</p>
 <p>This is compatible with POSIX-compatible OSes.</p>
 
 <h2>
-<a name="example-usage" class="anchor" href="#example-usage"><span class="octicon octicon-link"></span></a>Example Usage</h2>
+<a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Getting Started</h2>
+
+<p>Install it from the command-line via:</p>
+
+<div class="highlight highlight-source-shell"><pre>$ gem install ruby-procinfo
+Successfully installed ruby-procinfo-0.2.1-x86_64-linux
+1 gem installed</pre></div>
+
+<p>Or add it to your Ruby project at the end of your Gemfile like so:</p>
+
+<div class="highlight highlight-source-ruby"><pre><span class="pl-k">gem</span> <span class="pl-s"><span class="pl-pds">'</span>ruby-procinfo<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>~&gt;0.2.1<span class="pl-pds">'</span></span></pre></div>
+
+<h2>
+<a id="example-usage" class="anchor" href="#example-usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Example Usage</h2>
+
+<p>Require <code>'procinfo'</code>:</p>
+
+<div class="highlight highlight-source-ruby"><pre>irb(main):<span class="pl-c1">001</span>:<span class="pl-c1">0</span><span class="pl-k">&gt;</span> <span class="pl-k">require</span> <span class="pl-s"><span class="pl-pds">'</span>procinfo<span class="pl-pds">'</span></span>
+=&gt; <span class="pl-c1">true</span></pre></div>
 
 <p>Retrieve rusage stats for all children processes:</p>
 
-<div class="highlight highlight-ruby"><pre><span class="n">stats</span> <span class="o">=</span> <span class="no">Process</span><span class="o">.</span><span class="n">stats</span><span class="p">(</span><span class="ss">:children</span><span class="p">)</span>
-<span class="nb">puts</span> <span class="n">stats</span><span class="o">.</span><span class="n">user_time</span><span class="p">,</span> <span class="n">stats</span><span class="o">.</span><span class="n">system_time</span>
-<span class="c1"># some useful fields, but few others supported</span>
-<span class="nb">puts</span> <span class="n">stats</span><span class="o">.</span><span class="n">max_rss</span>
-<span class="nb">puts</span> <span class="n">stats</span><span class="o">.</span><span class="n">page_faults</span>
-<span class="nb">puts</span> <span class="n">stats</span><span class="o">.</span><span class="n">msgs_sent</span>
-<span class="nb">puts</span> <span class="n">stats</span><span class="o">.</span><span class="n">msgs_recvd</span>
-<span class="nb">puts</span> <span class="n">stats</span><span class="o">.</span><span class="n">signals_recvd</span>
-<span class="nb">puts</span> <span class="n">stats</span><span class="o">.</span><span class="n">shared_text_size</span>
-<span class="nb">puts</span> <span class="n">stats</span><span class="o">.</span><span class="n">swaps</span>
-<span class="nb">puts</span> <span class="n">stats</span><span class="o">.</span><span class="n">block_input_ops</span>
-<span class="nb">puts</span> <span class="n">stats</span><span class="o">.</span><span class="n">block_output_ops</span>
-</pre></div>
+<div class="highlight highlight-source-ruby"><pre>irb(main):<span class="pl-c1">002</span>:<span class="pl-c1">0</span><span class="pl-k">&gt;</span>
+irb(main):<span class="pl-c1">003</span>:<span class="pl-c1">0</span><span class="pl-k">*</span> stats <span class="pl-k">=</span> <span class="pl-c1">Process</span>.stats(<span class="pl-c1">:self</span>)
+=&gt; <span class="pl-c">#&lt;struct Struct::ProcStats user_time=0.185, system_time=0.017, max_rss=30652, shared_text_size=0, unshared_data_size=0, unshared_stack_size=0, page_reclaims=5954, page_faults=0, swaps=0, block_input_ops=0, block_output_ops=0, msgs_sent=0, msgs_recvd=0, signals_recvd=0, voluntary_switches=2, involuntary_switches=3&gt;</span>
+irb(main):<span class="pl-c1">004</span>:<span class="pl-c1">0</span><span class="pl-k">&gt;</span> stats.user_time
+=&gt; <span class="pl-c1">0.185</span>
+irb(main):<span class="pl-c1">005</span>:<span class="pl-c1">0</span><span class="pl-k">&gt;</span> stats.system_time
+=&gt; <span class="pl-c1">0.017</span>
+irb(main):<span class="pl-c1">006</span>:<span class="pl-c1">0</span><span class="pl-k">&gt;</span> stats.max_rss
+=&gt; <span class="pl-c1">30652</span>
+irb(main):<span class="pl-c1">007</span>:<span class="pl-c1">0</span><span class="pl-k">&gt;</span> stats.page_faults
+=&gt; <span class="pl-c1">0</span>
+irb(main):008:<span class="pl-c1">0</span><span class="pl-k">&gt;</span> stats.msgs_sent
+=&gt; <span class="pl-c1">0</span>
+irb(main):009:<span class="pl-c1">0</span><span class="pl-k">&gt;</span> stats.msgs_recvd
+=&gt; <span class="pl-c1">0</span>
+irb(main):<span class="pl-c1">010</span>:<span class="pl-c1">0</span><span class="pl-k">&gt;</span> stats.signals_recvd
+=&gt; <span class="pl-c1">0</span>
+irb(main):<span class="pl-c1">011</span>:<span class="pl-c1">0</span><span class="pl-k">&gt;</span> stats.shared_text_size
+=&gt; <span class="pl-c1">0</span>
+irb(main):<span class="pl-c1">012</span>:<span class="pl-c1">0</span><span class="pl-k">&gt;</span> stats.swaps
+=&gt; <span class="pl-c1">0</span>
+irb(main):<span class="pl-c1">013</span>:<span class="pl-c1">0</span><span class="pl-k">&gt;</span> stats.block_input_ops
+=&gt; <span class="pl-c1">0</span>
+irb(main):<span class="pl-c1">014</span>:<span class="pl-c1">0</span><span class="pl-k">&gt;</span> stats.block_output_ops
+=&gt; <span class="pl-c1">0</span></pre></div>
 
 <p>You can also get uname information about the system your process is running
 on:</p>
 
-<div class="highlight highlight-ruby"><pre><span class="n">sysinfo</span> <span class="o">=</span> <span class="no">System</span><span class="o">.</span><span class="n">uname</span>
-<span class="nb">puts</span> <span class="n">sysinfo</span><span class="o">.</span><span class="n">sysname</span>
-<span class="nb">puts</span> <span class="n">sysinfo</span><span class="o">.</span><span class="n">nodename</span>
-<span class="nb">puts</span> <span class="n">sysinfo</span><span class="o">.</span><span class="n">release</span>
-<span class="nb">puts</span> <span class="n">sysinfo</span><span class="o">.</span><span class="n">version</span>
-<span class="nb">puts</span> <span class="n">sysinfo</span><span class="o">.</span><span class="n">machine</span>
-</pre></div>
+<div class="highlight highlight-source-ruby"><pre>irb(main):<span class="pl-c1">021</span>:<span class="pl-c1">0</span><span class="pl-k">&gt;</span> sysinfo <span class="pl-k">=</span> <span class="pl-c1">System</span>.uname
+=&gt; <span class="pl-c">#&lt;struct Struct::SystemInfo sysname="Linux", nodename="durga", release="4.7.2", version="#1-NixOS SMP Sat Aug 20 16:11:18 UTC 2016", machine="x86_64"&gt;</span>
+irb(main):<span class="pl-c1">022</span>:<span class="pl-c1">0</span><span class="pl-k">&gt;</span> sysinfo.sysname
+=&gt; <span class="pl-s"><span class="pl-pds">"</span>Linux<span class="pl-pds">"</span></span>
+irb(main):<span class="pl-c1">023</span>:<span class="pl-c1">0</span><span class="pl-k">&gt;</span> sysinfo.nodename
+=&gt; <span class="pl-s"><span class="pl-pds">"</span>durga<span class="pl-pds">"</span></span>
+irb(main):<span class="pl-c1">024</span>:<span class="pl-c1">0</span><span class="pl-k">&gt;</span> sysinfo.release
+=&gt; <span class="pl-s"><span class="pl-pds">"</span>4.7.2<span class="pl-pds">"</span></span>
+irb(main):<span class="pl-c1">025</span>:<span class="pl-c1">0</span><span class="pl-k">&gt;</span> sysinfo.version
+=&gt; <span class="pl-s"><span class="pl-pds">"</span>#1-NixOS SMP Sat Aug 20 16:11:18 UTC 2016<span class="pl-pds">"</span></span>
+irb(main):<span class="pl-c1">026</span>:<span class="pl-c1">0</span><span class="pl-k">&gt;</span> sysinfo.machine
+=&gt; <span class="pl-s"><span class="pl-pds">"</span>x86_64<span class="pl-pds">"</span></span></pre></div>
 
 <h2>
-<a name="micro-benchmarks" class="anchor" href="#micro-benchmarks"><span class="octicon octicon-link"></span></a>Micro Benchmarks</h2>
+<a id="microbenchmarks" class="anchor" href="#microbenchmarks" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Microbenchmarks</h2>
 
-<p>This is only useful if you need to poll this information often, so use judiciously:</p>
+<p>The reason I even bothered writing this tiny, focused gem is because while on
+vacation at a Rails shop I used to work at someone added a <code>ps ef | awk ...</code>
+shell from the Rails app every tenth request to get the RSS and decide if we
+should kill the worker. Needless to say this was a crazy idea. As a consequence
+efficiency of this library was paramount so we could use it in the Rails app
+Unicorn worker hook as needed.</p>
+
+<p>So here are some microbenchmarks for this APIs usage:</p>
+
+<h3>
+<a id="ruby-192-ruby-procinfo-v021" class="anchor" href="#ruby-192-ruby-procinfo-v021" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Ruby 1.9.2 (ruby-procinfo v0.2.1)</h3>
 
 <pre><code># Running benchmarks:
+Process information retrieval          1        10         100      1000     10000
+bench_Process_stats             0.000013  0.000010    0.000008  0.000011  0.000009
+bench_Process_stats_children    0.000012  0.000009    0.000007  0.000007  0.000007
+bench_Process_stats_self        0.000011  0.000010    0.000009  0.000009  0.000007
+bench_System_uname              0.000016  0.000011    0.000006  0.000006  0.000008
+bench_Spawn_ps_rss              0.004176  0.004099    0.004035  0.003807  0.004230
+bench_POSIX_Spawn_popen4        0.001312  0.000916    0.000854  0.000826  0.000881
 
-
-Process information retrieval            1              10             100            1000           10000
-bench_POSIX_Spawn_popen4          0.005980        0.025996        0.004227        0.002901        0.002780
-bench_Process_stats               0.000048        0.000041        0.000034        0.000035        0.000036
-bench_Process_stats_children      0.000042        0.000038        0.000034        0.000031        0.000032
-bench_Process_stats_self          0.000048        0.000046        0.000032        0.000033        0.000035
-bench_Spawn_ps_rss                0.050123        0.020579        0.043924        0.058219        0.064938
-bench_System_uname                0.000042        0.000031        0.000027        0.000027        0.000026
-
-
-Finished benchmarks in 0.673457s, 8.9093 tests/s, 8.9093 assertions/s.
-
-6 tests, 6 assertions, 0 failures, 0 errors, 0 skips
+Finished benchmarks in 0.128492s, 46.6957 tests/s, 46.6957 assertions/s.
 </code></pre>
 
-<p>The control micro benchmarks are <code>bench_POSIX_Spawn_popen4</code> and <code>bench_Spawn_ps_rss</code>. As you can see comparatively this gem (since it is a Ruby/C extension) is pretty efficient.</p>
+<h3>
+<a id="ruby-193-ruby-procinfo-v021" class="anchor" href="#ruby-193-ruby-procinfo-v021" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Ruby 1.9.3 (ruby-procinfo v0.2.1)</h3>
+
+<pre><code># Running benchmarks:
+Process information retrieval          1        10         100      1000     10000
+bench_Process_stats             0.000016  0.000012    0.000007  0.000013  0.000008
+bench_Process_stats_children    0.000011  0.000008    0.000007  0.000021  0.000019
+bench_Process_stats_self        0.000013  0.000009    0.000008  0.000008  0.000008
+bench_System_uname              0.000014  0.000019    0.000006  0.000006  0.000006
+bench_Spawn_ps_rss              0.004153  0.003816    0.003519  0.003595  0.003377
+bench_POSIX_Spawn_popen4        0.001194  0.000802    0.000759  0.000808  0.000766
+
+Finished benchmarks in 0.093692s, 64.0394 tests/s, 64.0394 assertions/s.
+</code></pre>
+
+<h3>
+<a id="ruby-200-ruby-procinfo-v021" class="anchor" href="#ruby-200-ruby-procinfo-v021" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Ruby 2.0.0 (ruby-procinfo v0.2.1)</h3>
+
+<pre><code># Running benchmarks:
+Process information retrieval        1          10         100      1000     10000
+bench_Process_stats           0.000023    0.000019    0.000017  0.000017  0.000018
+bench_Process_stats_children  0.000021    0.000016    0.000015  0.000014  0.000015
+bench_Process_stats_self      0.000020    0.000016    0.000013  0.000013  0.000013
+bench_System_uname            0.000022    0.000015    0.000013  0.000013  0.000012
+bench_Spawn_ps_rss            0.004301    0.003980    0.004084  0.003990  0.004178
+bench_POSIX_Spawn_popen4      0.001334    0.001059    0.001082  0.001121  0.001034
+
+Finished benchmarks in 0.215114s, 27.8922 tests/s, 27.8922 assertions/s.
+</code></pre>
+
+<h3>
+<a id="ruby-2110-ruby-procinfo-v021" class="anchor" href="#ruby-2110-ruby-procinfo-v021" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Ruby 2.1.10 (ruby-procinfo v0.2.1)</h3>
+
+<pre><code># Running benchmarks:
+Process information retrieval       1         10           100      1000     10000
+bench_Process_stats          0.000012   0.000009      0.000008  0.000007  0.000007
+bench_Process_stats_children 0.000024   0.000008      0.000007  0.000016  0.000006
+bench_Process_stats_self     0.000010   0.000009      0.000007  0.000007  0.000007
+bench_System_uname           0.000015   0.000009      0.000006  0.000006  0.000006
+bench_Spawn_ps_rss           0.004606   0.003659      0.003500  0.003288  0.003414
+bench_POSIX_Spawn_popen4     0.001241   0.000906      0.000842  0.000798  0.000809
+
+Finished benchmarks in 0.118000s, 50.8476 tests/s, 50.8476 assertions/s.
+</code></pre>
+
+<h3>
+<a id="ruby-225-ruby-procinfo-v021" class="anchor" href="#ruby-225-ruby-procinfo-v021" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Ruby 2.2.5 (ruby-procinfo v0.2.1)</h3>
+
+<pre><code># Running benchmarks:
+Process information retrieval       1         10           100      1000     10000
+bench_Process_stats          0.000014   0.000010      0.000008  0.000008  0.000008
+bench_Process_stats_children 0.000011   0.000011      0.000009  0.000007  0.000007
+bench_Process_stats_self     0.000011   0.000009      0.000008  0.000007  0.000008
+bench_System_uname           0.000010   0.000008      0.000006  0.000006  0.000006
+bench_Spawn_ps_rss           0.003457   0.002694      0.002744  0.002686  0.002616
+bench_POSIX_Spawn_popen4     0.001106   0.001408      0.000792  0.000753  0.000844
+
+Finished benchmarks in 0.109760s, 54.6649 tests/s, 54.6649 assertions/s.
+</code></pre>
+
+<h3>
+<a id="ruby-230-ruby-procinfo-v021" class="anchor" href="#ruby-230-ruby-procinfo-v021" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Ruby 2.3.0 (ruby-procinfo v0.2.1)</h3>
+
+<pre><code># Running benchmarks:
+Process information retrieval       1         10           100      1000     10000
+bench_Process_stats          0.000016   0.000011      0.000010  0.000008  0.000008
+bench_Process_stats_children 0.000012   0.000009      0.000083  0.000007  0.000007
+bench_Process_stats_self     0.000016   0.000010      0.000007  0.000011  0.000010
+bench_System_uname           0.000014   0.000010      0.000008  0.000006  0.000009
+bench_Spawn_ps_rss           0.003747   0.003267      0.003297  0.003118  0.003217
+bench_POSIX_Spawn_popen4     0.001312   0.000996      0.000897  0.000895  0.000857
+
+Finished benchmarks in 0.140802s, 42.6129 tests/s, 42.6129 assertions/s.
+</code></pre>
+
+<p>The above ran on my personal Macbook Pro development laptop running NixOS.</p>
+
+<p>The point of the above isn't to pat myself on the back rather just to ensure
+I'm not smoking crack when I introduce new APIs and/or fix any bugs. It
+should also warn you of not running the microbenchmark test suite on your
+target systems. You can do this by running the following:</p>
+
+<pre><code>bundle exec rake test
+</code></pre>
+
+<p>You should always sanity check your assumptions. Some assumptions are completely
+flawed, but even ones that seem reasonable should be validated in some scope and
+form.</p>
 
 <h2>
-<a name="motivation" class="anchor" href="#motivation"><span class="octicon octicon-link"></span></a>Motivation</h2>
+<a id="motivation" class="anchor" href="#motivation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Motivation</h2>
 
 <p>I really needed to be able to get current RSS and max RSS information (and
 related process information) for a given process (which may or may not be
@@ -109,7 +229,7 @@ currently maintained with tests.</p>
 not developing with it. It's a breath of fresh air.</p>
 
 <h2>
-<a name="related-works" class="anchor" href="#related-works"><span class="octicon octicon-link"></span></a>Related Works</h2>
+<a id="related-works" class="anchor" href="#related-works" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Related Works</h2>
 
 <p><code>sys-proctable</code> is Ruby/C extension library that provides this to some
 degree. I wanted to use a different approach to this library and lower
@@ -118,7 +238,7 @@ overhead, and compatibility of APIs exposed for all the supporting OSes.</p>
 <p>However, the above mentioned library may offer what you need.</p>
 
 <h2>
-<a name="todo" class="anchor" href="#todo"><span class="octicon octicon-link"></span></a>TODO</h2>
+<a id="todo" class="anchor" href="#todo" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>TODO</h2>
 
 <p>Lots to do still.</p>
 
@@ -126,29 +246,35 @@ overhead, and compatibility of APIs exposed for all the supporting OSes.</p>
 
 <ul>
 <li>Add socket/connection retrieval from the system based on state (e.g. <code>CLOSE_WAIT</code>)</li>
-</ul><h2>
-<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
+</ul>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h2>
 
 <p>This code is shared under the BSD 3-clause license. See LICENSE for
 more information.</p>
 
 <h2>
-<a name="authors" class="anchor" href="#authors"><span class="octicon octicon-link"></span></a>Author(s)</h2>
+<a id="authors" class="anchor" href="#authors" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Author(s)</h2>
 
 <ul>
 <li>
 <a href="http://susanpotter.net">Susan Potter</a>  (mbbx6spp on GitHub)</li>
-</ul><h2>
-<a name="contributors" class="anchor" href="#contributors"><span class="octicon octicon-link"></span></a>Contributor(s)</h2>
+</ul>
+
+<h2>
+<a id="contributors" class="anchor" href="#contributors" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contributor(s)</h2>
 
 <p>N/A</p>
-      </section>
-      <footer>
-        <p>This project is maintained by <a href="https://github.com/mbbx6spp">mbbx6spp</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/mbbx6spp/ruby-procinfo">Ruby-procinfo</a> is maintained by <a href="https://github.com/mbbx6spp">mbbx6spp</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
       </footer>
-    </div>
-    <script src="javascripts/scale.fix.js"></script>
-    
+
+    </section>
+
+  
   </body>
 </html>
