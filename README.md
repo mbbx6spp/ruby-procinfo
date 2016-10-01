@@ -31,33 +31,59 @@ gem 'ruby-procinfo', '~>0.2.1'
 
 ## Example Usage
 
+Require `'procinfo'`:
+
+```ruby
+irb(main):001:0> require 'procinfo'
+=> true
+```
+
 Retrieve rusage stats for all children processes:
 
 ```ruby
-stats = Process.stats(:children)
-puts stats.user_time, stats.system_time
-# some useful fields, but few others supported
-puts stats.max_rss
-puts stats.page_faults
-puts stats.msgs_sent
-puts stats.msgs_recvd
-puts stats.signals_recvd
-puts stats.shared_text_size
-puts stats.swaps
-puts stats.block_input_ops
-puts stats.block_output_ops
+irb(main):002:0>
+irb(main):003:0* stats = Process.stats(:self)
+=> #<struct Struct::ProcStats user_time=0.185, system_time=0.017, max_rss=30652, shared_text_size=0, unshared_data_size=0, unshared_stack_size=0, page_reclaims=5954, page_faults=0, swaps=0, block_input_ops=0, block_output_ops=0, msgs_sent=0, msgs_recvd=0, signals_recvd=0, voluntary_switches=2, involuntary_switches=3>
+irb(main):004:0> stats.user_time
+=> 0.185
+irb(main):005:0> stats.system_time
+=> 0.017
+irb(main):006:0> stats.max_rss
+=> 30652
+irb(main):007:0> stats.page_faults
+=> 0
+irb(main):008:0> stats.msgs_sent
+=> 0
+irb(main):009:0> stats.msgs_recvd
+=> 0
+irb(main):010:0> stats.signals_recvd
+=> 0
+irb(main):011:0> stats.shared_text_size
+=> 0
+irb(main):012:0> stats.swaps
+=> 0
+irb(main):013:0> stats.block_input_ops
+=> 0
+irb(main):014:0> stats.block_output_ops
+=> 0
 ```
 
 You can also get uname information about the system your process is running
 on:
 
 ```ruby
-sysinfo = System.uname
-puts sysinfo.sysname
-puts sysinfo.nodename
-puts sysinfo.release
-puts sysinfo.version
-puts sysinfo.machine
+irb(main):021:0> sysinfo = System.uname
+=> #<struct Struct::SystemInfo sysname="Linux", nodename="durga", release="4.7.2", version="#1-NixOS SMP Sat Aug 20 16:11:18 UTC 2016", machine="x86_64">
+irb(main):022:0> sysinfo.sysname
+=> "Linux"
+irb(main):023:0> sysinfo.nodename
+=> "durga"
+irb(main):024:0> sysinfo.release
+=> "4.7.2"
+irb(main):025:0> sysinfo.version
+=> "#1-NixOS SMP Sat Aug 20 16:11:18 UTC 2016"
+irb(main):026:0> sysinfo.machine
+=> "x86_64"
 ```
 
 ## Microbenchmarks
@@ -71,28 +97,98 @@ Unicorn worker hook as needed.
 
 So here are some microbenchmarks for this APIs usage:
 
+
+### Ruby 1.9.2 (ruby-procinfo v0.2.1)
+
 ```
 # Running benchmarks:
+Process information retrieval          1        10         100      1000     10000
+bench_Process_stats             0.000013  0.000010    0.000008  0.000011  0.000009
+bench_Process_stats_children    0.000012  0.000009    0.000007  0.000007  0.000007
+bench_Process_stats_self        0.000011  0.000010    0.000009  0.000009  0.000007
+bench_System_uname              0.000016  0.000011    0.000006  0.000006  0.000008
+bench_Spawn_ps_rss              0.004176  0.004099    0.004035  0.003807  0.004230
+bench_POSIX_Spawn_popen4        0.001312  0.000916    0.000854  0.000826  0.000881
 
-
-Process information retrieval            1              10             100            1000           10000
-+bench_POSIX_Spawn_popen4         0.005980        0.025996        0.004227        0.002901        0.002780
-bench_Process_stats               0.000048        0.000041        0.000034        0.000035        0.000036
-bench_Process_stats_children      0.000042        0.000038        0.000034        0.000031        0.000032
-bench_Process_stats_self          0.000048        0.000046        0.000032        0.000033        0.000035
-bench_Spawn_ps_rss                0.050123        0.020579        0.043924        0.058219        0.064938
-bench_System_uname                0.000042        0.000031        0.000027        0.000027        0.000026
-
-
-Finished benchmarks in 0.673457s, 8.9093 tests/s, 8.9093 assertions/s.
-
-6 tests, 6 assertions, 0 failures, 0 errors, 0 skips
+Finished benchmarks in 0.128492s, 46.6957 tests/s, 46.6957 assertions/s.
 ```
 
-The above was running on my personal Macbook Pro development laptop
-instead of one of the target Linux systems, but similar orders of magnitude
-differences were recorded for our intended target too (I no longer work
-there so I can't run on that target host type now).
+### Ruby 1.9.3 (ruby-procinfo v0.2.1)
+
+```
+# Running benchmarks:
+Process information retrieval          1        10         100      1000     10000
+bench_Process_stats             0.000016  0.000012    0.000007  0.000013  0.000008
+bench_Process_stats_children    0.000011  0.000008    0.000007  0.000021  0.000019
+bench_Process_stats_self        0.000013  0.000009    0.000008  0.000008  0.000008
+bench_System_uname              0.000014  0.000019    0.000006  0.000006  0.000006
+bench_Spawn_ps_rss              0.004153  0.003816    0.003519  0.003595  0.003377
+bench_POSIX_Spawn_popen4        0.001194  0.000802    0.000759  0.000808  0.000766
+
+Finished benchmarks in 0.093692s, 64.0394 tests/s, 64.0394 assertions/s.
+```
+
+### Ruby 2.0.0 (ruby-procinfo v0.2.1)
+
+```
+# Running benchmarks:
+Process information retrieval        1          10         100      1000     10000
+bench_Process_stats           0.000023    0.000019    0.000017  0.000017  0.000018
+bench_Process_stats_children  0.000021    0.000016    0.000015  0.000014  0.000015
+bench_Process_stats_self      0.000020    0.000016    0.000013  0.000013  0.000013
+bench_System_uname            0.000022    0.000015    0.000013  0.000013  0.000012
+bench_Spawn_ps_rss            0.004301    0.003980    0.004084  0.003990  0.004178
+bench_POSIX_Spawn_popen4      0.001334    0.001059    0.001082  0.001121  0.001034
+
+Finished benchmarks in 0.215114s, 27.8922 tests/s, 27.8922 assertions/s.
+```
+
+### Ruby 2.1.10 (ruby-procinfo v0.2.1)
+
+```
+# Running benchmarks:
+Process information retrieval       1         10           100      1000     10000
+bench_Process_stats          0.000012   0.000009      0.000008  0.000007  0.000007
+bench_Process_stats_children 0.000024   0.000008      0.000007  0.000016  0.000006
+bench_Process_stats_self     0.000010   0.000009      0.000007  0.000007  0.000007
+bench_System_uname           0.000015   0.000009      0.000006  0.000006  0.000006
+bench_Spawn_ps_rss           0.004606   0.003659      0.003500  0.003288  0.003414
+bench_POSIX_Spawn_popen4     0.001241   0.000906      0.000842  0.000798  0.000809
+
+Finished benchmarks in 0.118000s, 50.8476 tests/s, 50.8476 assertions/s.
+```
+
+### Ruby 2.2.5 (ruby-procinfo v0.2.1)
+
+```
+# Running benchmarks:
+Process information retrieval       1         10           100      1000     10000
+bench_Process_stats          0.000014   0.000010      0.000008  0.000008  0.000008
+bench_Process_stats_children 0.000011   0.000011      0.000009  0.000007  0.000007
+bench_Process_stats_self     0.000011   0.000009      0.000008  0.000007  0.000008
+bench_System_uname           0.000010   0.000008      0.000006  0.000006  0.000006
+bench_Spawn_ps_rss           0.003457   0.002694      0.002744  0.002686  0.002616
+bench_POSIX_Spawn_popen4     0.001106   0.001408      0.000792  0.000753  0.000844
+
+Finished benchmarks in 0.109760s, 54.6649 tests/s, 54.6649 assertions/s.
+```
+
+### Ruby 2.3.0 (ruby-procinfo v0.2.1)
+
+```
+# Running benchmarks:
+Process information retrieval       1         10           100      1000     10000
+bench_Process_stats          0.000016   0.000011      0.000010  0.000008  0.000008
+bench_Process_stats_children 0.000012   0.000009      0.000083  0.000007  0.000007
+bench_Process_stats_self     0.000016   0.000010      0.000007  0.000011  0.000010
+bench_System_uname           0.000014   0.000010      0.000008  0.000006  0.000009
+bench_Spawn_ps_rss           0.003747   0.003267      0.003297  0.003118  0.003217
+bench_POSIX_Spawn_popen4     0.001312   0.000996      0.000897  0.000895  0.000857
+
+Finished benchmarks in 0.140802s, 42.6129 tests/s, 42.6129 assertions/s.
+```
+
+The above ran on my personal Macbook Pro development laptop running NixOS.
 
 The point of the above isn't to pat myself on the back rather just to ensure
 I'm not smoking crack when I introduce new APIs and/or fix any bugs. It
