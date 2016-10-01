@@ -31,33 +31,59 @@ gem 'ruby-procinfo', '~>0.2.1'
 
 ## Example Usage
 
+Require `'procinfo'`:
+
+```ruby
+irb(main):001:0> require 'procinfo'
+=> true
+```
+
 Retrieve rusage stats for all children processes:
 
 ```ruby
-stats = Process.stats(:children)
-puts stats.user_time, stats.system_time
-# some useful fields, but few others supported
-puts stats.max_rss
-puts stats.page_faults
-puts stats.msgs_sent
-puts stats.msgs_recvd
-puts stats.signals_recvd
-puts stats.shared_text_size
-puts stats.swaps
-puts stats.block_input_ops
-puts stats.block_output_ops
+irb(main):002:0>
+irb(main):003:0* stats = Process.stats(:self)
+=> #<struct Struct::ProcStats user_time=0.185, system_time=0.017, max_rss=30652, shared_text_size=0, unshared_data_size=0, unshared_stack_size=0, page_reclaims=5954, page_faults=0, swaps=0, block_input_ops=0, block_output_ops=0, msgs_sent=0, msgs_recvd=0, signals_recvd=0, voluntary_switches=2, involuntary_switches=3>
+irb(main):004:0> stats.user_time
+=> 0.185
+irb(main):005:0> stats.system_time
+=> 0.017
+irb(main):006:0> stats.max_rss
+=> 30652
+irb(main):007:0> stats.page_faults
+=> 0
+irb(main):008:0> stats.msgs_sent
+=> 0
+irb(main):009:0> stats.msgs_recvd
+=> 0
+irb(main):010:0> stats.signals_recvd
+=> 0
+irb(main):011:0> stats.shared_text_size
+=> 0
+irb(main):012:0> stats.swaps
+=> 0
+irb(main):013:0> stats.block_input_ops
+=> 0
+irb(main):014:0> stats.block_output_ops
+=> 0
 ```
 
 You can also get uname information about the system your process is running
 on:
 
 ```ruby
-sysinfo = System.uname
-puts sysinfo.sysname
-puts sysinfo.nodename
-puts sysinfo.release
-puts sysinfo.version
-puts sysinfo.machine
+irb(main):021:0> sysinfo = System.uname
+=> #<struct Struct::SystemInfo sysname="Linux", nodename="durga", release="4.7.2", version="#1-NixOS SMP Sat Aug 20 16:11:18 UTC 2016", machine="x86_64">
+irb(main):022:0> sysinfo.sysname
+=> "Linux"
+irb(main):023:0> sysinfo.nodename
+=> "durga"
+irb(main):024:0> sysinfo.release
+=> "4.7.2"
+irb(main):025:0> sysinfo.version
+=> "#1-NixOS SMP Sat Aug 20 16:11:18 UTC 2016"
+irb(main):026:0> sysinfo.machine
+=> "x86_64"
 ```
 
 ## Microbenchmarks
